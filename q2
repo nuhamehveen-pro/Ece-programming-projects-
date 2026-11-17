@@ -1,0 +1,18 @@
+#include<stdio.h>
+int main(void)
+{
+int h[6]= {0}, n[6] = {0}, id, s, d, r, ok = 0, bad = 0, i;
+const char *nm[] = {"normal", "amber", "critical"};
+for(i=0; i < 100 && scanf ("%d", &id) == 1 && id != -9999; i++){
+    if(scanf("%d %d %d", &s, &d, &r) != 3) break;
+if(id <= 0 || s<1 || s > 5 || d <-1 || r<-1) {bad++; continue; }
+int a = (d>=5 || r >=2) ? 2 : (d >= 3 || r >= 1) ? 1 : 0;
+ok++; n[s]++;
+if (a>h[s]) h[s] = a;
+}
+printf("valid: %d, rejected: %d\n", ok, bad);
+for(i=1; i <= 5; i++)
+    printf("sector %d: records=%d, alert=%s\n", i, n[i], nm[h[i]] );
+return 0;
+}
+    
