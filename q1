@@ -1,0 +1,26 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+int main(void)
+{
+    long long a, b, c, H, k, D;
+    double t = -1, s, r1, r2, lo, hi;
+    if(scanf("%lld %lld %lld %lld", &a, &b, &c, &H) !=4 || llabs(a) > 50000 || llabs(b) > 50000 || llabs(c) > 50000 || llabs(H) > 50000)
+    {
+        printf("invalid input\n");
+        return 1;
+    }
+k = c - H;
+if(k == 0) t = 0;
+else if (a == 0) { if (b) t = -(double)k / b;}
+else if ((D= b * b - 4 * a * k) >= 0){s = sqrt((double)D); r1 = (-b-s) / (2.0 * a);
+r2 = (-b+s) / (2.0 * a);
+lo = r1 < r2 ? r1 : r2;
+hi = r1 < r2 ? r2: r1;
+t = (lo >= 0 && lo <= 24) ? lo : hi;
+}
+if(t >= 0 && t<= 24) printf("threshold reached at t = %.4f hours\n", t);
+else printf("threshold not reached in [0 , 24]\n");
+return 0;
+}
+    
