@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+int main() {
+    int rain[8][8], ns, nh, i, j;
+
+    scanf("%d %d", &ns, &nh);
+    if (ns < 1 || ns > 8 || nh < 1 || nh > 8) {
+        printf("Invalid size\n");
+        return 1;
+    }
+
+    for (i = 0; i < ns; i++)
+        for (j = 0; j < nh; j++)
+            scanf("%d", &rain[i][j]);   /* -1 = missing */
+
+    int peak = -1, peakID = -1;
+
+    for (i = 0; i < ns; i++) {
+        int total = 0, valid = 0;
+
+        for (j = 0; j < nh; j++)
+            if (rain[i][j] != -1) {
+                total += rain[i][j];
+                valid++;
+            }
+
+        if (valid == 0)
+            printf("Sector %d: no valid total\n", i);
+        else {
+            printf("Sector %d: total = %d\n", i, total);
+            if (total > peak) {
+                peak = total;
+                peakID = i;
+            }
+        }
+    }
+
+    if (peakID == -1)
+        printf("Peak: none\n");
+    else
+        printf("Peak: sector %d with %d\n", peakID, peak);
+
+    return 0;
+}
