@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+struct node {
+    char data;
+    struct node *left, *right;
+};
+
+int priority(char c) {
+    if (c == '*' || c == '/') return 2;
+    if (c == '+' || c == '-') return 1;
+    return 0;
+}
+
+void display(struct node *t, int level) {
+    int i;
+    if (t) {
+        display(t->right, level + 1);
+        for (i = 0; i < level; i++) printf("    ");
+        printf("%c\n", t->data);
+        display(t->left, level + 1);
+    }
+}
+
+int main() {
+    char infix[50], postfix[50], opstack[50];
+    struct node *nodestack[50];
+    int optop = -1, nodetop = -1, i, k = 0;
+
+    printf("Enter infix expression: ");
+    scanf("%49s", infix);
+
+    /* Step 1: infix to postfix */
+    for (i = 0; infix[i] != '\0'; i++) {
+        char c = infix[i];
+        if (isalnum(c)) {
+            postfix[k++] = c;
+        } else if (c == '(') {
+            opstack[++optop] = c;
+        } else if (c == ')') {
+            for (; opstack[optop] != '('; optop--)
+                postfix[k++] = opstack[optop];
+            optop--;
+        } else {
+            for (; optop >= 0 && priority(opstack[optop]) >= priority(c); optop--)
+                postfix[k++] = opstack[optop];
+            opstack[++optop] = c;
+        }
+    }
+    for (; optop >= 0; optop--)
+        postfix[k++] = opstack[optop];
+    postfix[k] = '\0';
+    printf("Postfix: %s\n", postfix);
+
+    /* Step 2: build the tree */
+    for (i = 0; postfix[i] != '\0'; i++) {
+        struct node *n = malloc(sizeof(struct node));
+        n->data = postfix[i];
+        n->left = n->right = NULL;
+        if (!isalnum(postfix[i])) {
+            n->right = nodestack[nodetop--];
+            n->left = nodestack[nodetop--];
+        }
+        nodestack[++nodetop] = n;
+    }
+
+    printf("\nTree (sideways):\n");
+    display(nodestack[nodetop], 0);
+    return 0;
+}
