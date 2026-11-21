@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+int validate(const int *d, int n)
+{
+    if (d == NULL || n <= 0 || n > 8) return 1;
+    return 0;
+}
+
+int findPeak(const int *d, int n, int *hr)
+{
+    int i, best = -1;
+
+    for (i = 0; i < n; i++)
+        if (d[i] != -1 && (best == -1 || d[i] > d[best]))
+            best = i;
+
+    if (best == -1) return 2;
+    *hr = best;
+    return 0;
+}
+
+int alertLevel(int peak)
+{
+    if (peak >= 5) return 2;
+    if (peak >= 3) return 1;
+    return 0;
+}
+
+int process(const int *d, int n, int *hr, int *lvl)
+{
+    int h, e;
+
+    if (hr == NULL || lvl == NULL) return 3;
+    e = validate(d, n);
+    if (e) return e;
+    e = findPeak(d, n, &h);
+    if (e) return e;
+
+    *hr = h;
+    *lvl = alertLevel(d[h]);
+    return 0;
+}
+
+int main()
+{
+    int s[3][4] = {{1, 4, 6, -1}, {0, 2, 3, 1}, {-1, -1, -1, -1}};
+    int h[3], l[3], e, i;
+
+    for (i = 0; i < 3; i++)
+    {
+        h[i] = -1;
+        l[i] = -1;
+        e = process(s[i], 4, &h[i], &l[i]);
+        if (e == 0)
+            printf("S%d: peak=%d level=%d\n", i + 1, h[i], l[i]);
+        else
+            printf("S%d: error=%d\n", i + 1, e);
+    }
+
+    e = process(s[0], 4, &h[0], NULL);
+    printf("NULL test: error=%d, S1 still %d %d\n", e, h[0], l[0]);
+
+    return 0;
+}
