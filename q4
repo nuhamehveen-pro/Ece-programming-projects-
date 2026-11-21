@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char a[32], b[32], d[32];
+    char w1[32], w2[32];
+
+    fgets(a, 32, stdin);
+    fgets(b, 32, stdin);
+
+    if (strchr(a, '\n') == NULL || strchr(b, '\n') == NULL)
+    {
+        printf("Label too long\n");
+        return 1;
+    }
+
+    a[strcspn(a, "\n")] = 0;
+    b[strcspn(b, "\n")] = 0;
+
+    sscanf(a, "%31s", w1);
+    sscanf(b, "%31s", w2);
+
+    printf("First word same: %d\n", strcmp(w1, w2) == 0);
+
+    if (strcmp(a, b) == 0)
+        printf("Same site\n");
+    else
+        printf("Different sites\n");
+
+    snprintf(d, 32, "%s-RED", a);
+    printf("Display: %s\n", d);
+
+    return 0;
+}
